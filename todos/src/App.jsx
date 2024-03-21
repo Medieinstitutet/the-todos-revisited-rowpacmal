@@ -1,7 +1,7 @@
 import './App.css';
 import { ethers } from 'ethers';
 import { useEffect, useState, useCallback } from 'react';
-import config from './utils/config';
+import TodoServices from './services/TodoServices';
 import AppHeader from './components/AppHeader';
 import ConnectedWallet from './components/ConnectedWallet';
 import AddNewTodo from './components/AddNewTodo';
@@ -27,8 +27,7 @@ function App() {
   const [textInput, setTextInput] = useState('');
 
   const formatBalance = (rawBalance) => {
-    const balance = (parseInt(rawBalance) / Math.pow(10, 18)).toFixed(4);
-    return balance;
+    return (parseInt(rawBalance) / Math.pow(10, 18)).toFixed(4);
   };
 
   const updateWallet = async (accounts) => {
@@ -38,41 +37,34 @@ function App() {
         params: [accounts[0], 'latest'],
       })
     );
+
     setWallet({ accounts, balance });
   };
 
   const updateTodos = useCallback(async () => {
     const indx = await readContract['todoCount']();
     const temp = [];
+
     for (let i = 0; i <= Number(indx); ++i) {
       const todo = await readContract['todos'](i);
       if (todo.id > 0) temp.push(todo);
     }
+
     setTodos(temp);
   }, [readContract]);
 
   useEffect(() => {
     const setupProvider = async () => {
-      const readSmartContract = new ethers.Contract(
-        config.contractAddress,
-        config.abi,
-        window.provider
-      );
-      setReadContract(readSmartContract);
-
       const signer = await window.provider.getSigner();
-      const writeSmartContract = new ethers.Contract(
-        config.contractAddress,
-        config.abi,
-        signer
-      );
-      setWriteContract(writeSmartContract);
-
-      let accounts = await window.ethereum.request({
+      const accounts = await window.ethereum.request({
         method: 'eth_requestAccounts',
       });
+
+      setReadContract(new TodoServices().readSmartContract(window.provider));
+      setWriteContract(new TodoServices().writeSmartContract(signer));
       updateWallet(accounts);
     };
+
     setupProvider();
   }, []);
 

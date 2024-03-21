@@ -13,6 +13,10 @@ class TodoServices {
   readSmartContract(provider) {
     return new ethers.Contract(this.#contractAddress, this.#abi, provider);
   }
+
+  writeSmartContract(signer) {
+    return new ethers.Contract(this.#contractAddress, this.#abi, signer);
+  }
 }
 
 export default TodoServices;
