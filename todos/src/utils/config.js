@@ -1,5 +1,5 @@
 const config = {
-  address: '0x29b71a5d443ff435DE15B8E105aEedD2Ff9B8cce',
+  contractAddress: '0xDecB0E2949b9B3aeD366f293BF0e311044e8b07E',
 
   abi: [
     {
