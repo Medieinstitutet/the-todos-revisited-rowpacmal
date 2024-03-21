@@ -49,7 +49,7 @@
 .todo-form {
   display: flex;
   justify-content: center;
-  gap: 0.6rem;
+  gap: 1.2rem;
   margin: 2rem 0;
 }
 
@@ -57,9 +57,9 @@
   border-radius: 2rem;
   border: 1px solid transparent;
   transition: border-color 0.25s;
-  padding: 0.6rem 1.2rem;
-  min-width: 400px;
-  min-height: 75px;
+  padding: 0.6rem 1.8rem;
+  width: 100%;
+  background-color: #88888844;
 }
 
 .text-input:hover {
@@ -108,4 +108,42 @@
 .todos-completed {
   font-style: italic;
   font-size: 1.2rem;
+}
+
+.wallet-wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+
+.wallet {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 0.6rem 1.2rem;
+  min-height: 90px;
+  min-width: 200px;
+  background-color: #88888844;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: color 0.25s, border-color 0.25s, scale 0.5s;
+  cursor: default;
+
+  h4 {
+    margin: 0;
+  }
+}
+
+.highlighted-text {
+  color: #646cff;
+}
+
+.align-icons {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.3rem;
 }

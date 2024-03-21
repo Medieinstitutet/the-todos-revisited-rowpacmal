@@ -2,9 +2,10 @@ import './App.css';
 import { ethers } from 'ethers';
 import { useEffect, useState, useCallback } from 'react';
 import config from './utils/config';
+import AppHeader from './components/AppHeader';
+import ConnectedWallet from './components/ConnectedWallet';
+import AddNewTodo from './components/AddNewTodo';
 import TodoList from './components/TodoList';
-import { IconPlus } from '@tabler/icons-react';
-import AddTodo from './components/AddTodo';
 import AppFooter from './components/AppFooter';
 
 if (window.ethereum) {
@@ -26,7 +27,7 @@ function App() {
   const [textInput, setTextInput] = useState('');
 
   const formatBalance = (rawBalance) => {
-    const balance = (parseInt(rawBalance) / 1000000000000000000).toFixed(5);
+    const balance = (parseInt(rawBalance) / Math.pow(10, 18)).toFixed(4);
     return balance;
   };
 
@@ -39,6 +40,16 @@ function App() {
     );
     setWallet({ accounts, balance });
   };
+
+  const updateTodos = useCallback(async () => {
+    const indx = await readContract['todoCount']();
+    const temp = [];
+    for (let i = 0; i <= Number(indx); ++i) {
+      const todo = await readContract['todos'](i);
+      if (todo.id > 0) temp.push(todo);
+    }
+    setTodos(temp);
+  }, [readContract]);
 
   useEffect(() => {
     const setupProvider = async () => {
@@ -65,72 +76,33 @@ function App() {
     setupProvider();
   }, []);
 
-  const updateTodos = useCallback(async () => {
-    const indx = await readContract['todoCount']();
-    const temp = [];
-    for (let i = 0; i <= Number(indx); ++i) {
-      const todo = await readContract['todos'](i);
-      if (todo.id > 0) temp.push(todo);
-    }
-    setTodos(temp);
-  }, [readContract]);
-
   useEffect(() => {
     if (wallet && readContract) {
       updateTodos();
     }
   }, [wallet, readContract, updateTodos]);
 
-  const addTodo = async () => {
-    try {
-      const result = await writeContract.createTodo(textInput);
-      await result.wait();
-      updateTodos();
-      updateWallet(wallet.accounts);
-    } catch (error) {
-      console.error(error);
-    }
-    setTextInput('');
-  };
-
-  const completeTodo = async (id) => {
-    try {
-      const result = await writeContract.toggleTodo(id);
-      await result.wait();
-      updateTodos();
-      updateWallet(wallet.accounts);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
-  const deleteTodo = async (id) => {
-    try {
-      const result = await writeContract.removeTodo(id);
-      await result.wait();
-      updateTodos();
-      updateWallet(wallet.accounts);
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <>
-      <div>
-        {wallet.accounts} - {wallet.balance} ETH
-      </div>
+      <AppHeader />
 
-      <AddTodo
-        add={addTodo}
+      <ConnectedWallet wallet={wallet} />
+
+      <AddNewTodo
         input={textInput}
         setInput={setTextInput}
+        wallet={wallet}
+        writeContract={writeContract}
+        updateTodos={updateTodos}
+        updateWallet={updateWallet}
       />
 
       <TodoList
         list={todos}
-        toggle={completeTodo}
-        remove={deleteTodo}
+        wallet={wallet}
+        writeContract={writeContract}
+        updateTodos={updateTodos}
+        updateWallet={updateWallet}
       />
 
       <AppFooter />

@@ -4,7 +4,35 @@ import {
   IconTrash,
 } from '@tabler/icons-react';
 
-const TodoList = ({ list, toggle, remove }) => {
+const TodoList = ({
+  list,
+  wallet,
+  writeContract,
+  updateTodos,
+  updateWallet,
+}) => {
+  const completeTodo = async (id) => {
+    try {
+      const result = await writeContract.toggleTodo(id);
+      await result.wait();
+      updateTodos();
+      updateWallet(wallet.accounts);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const deleteTodo = async (id) => {
+    try {
+      const result = await writeContract.removeTodo(id);
+      await result.wait();
+      updateTodos();
+      updateWallet(wallet.accounts);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const todoItems = list.map((todo) => (
     <li
       key={todo.id}
@@ -12,7 +40,7 @@ const TodoList = ({ list, toggle, remove }) => {
     >
       <button
         className="toggle-btn"
-        onClick={() => toggle(todo.id)}
+        onClick={() => completeTodo(todo.id)}
       >
         {todo.completed ? <IconSquareCheckFilled /> : <IconSquare />}
       </button>
@@ -21,7 +49,7 @@ const TodoList = ({ list, toggle, remove }) => {
 
       <button
         className="delete-btn"
-        onClick={() => remove(todo.id)}
+        onClick={() => deleteTodo(todo.id)}
       >
         <IconTrash />
       </button>
@@ -33,7 +61,7 @@ const TodoList = ({ list, toggle, remove }) => {
       todoItems
     ) : (
       <li className="todos-completed">
-        You've completed all your tasks. Enjoy your well-deserved break!
+        You&apos;ve completed all your tasks. Enjoy your well-deserved break!
       </li>
     );
 
