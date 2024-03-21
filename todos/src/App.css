@@ -43,4 +43,40 @@
 
 .done {
   text-decoration: line-through;
+  opacity: 0.5;
+}
+
+.todo-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.todo-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #88888844;
+  padding: 0.6rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  transition: color 0.25s, border-color 0.25s, scale 0.5s;
+  cursor: default;
+}
+
+.todo-item:hover {
+  scale: 1.05;
+  color: #646cff;
+  border-color: #646cff;
+}
+
+.toggle-btn:hover {
+  color: #1bffd1;
+  border-color: #1bffd1;
+}
+
+.delete-btn:hover {
+  color: #ff1b32;
+  border-color: #ff1b32;
 }

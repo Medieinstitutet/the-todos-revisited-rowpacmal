@@ -2,6 +2,8 @@ import './App.css';
 import { ethers } from 'ethers';
 import { useEffect, useState, useCallback } from 'react';
 import config from './utils/config';
+import TodoList from './components/TodoList';
+import { IconPlus } from '@tabler/icons-react';
 
 if (window.ethereum) {
   window.provider = new ethers.BrowserProvider(window.ethereum);
@@ -77,7 +79,7 @@ function App() {
     }
   }, [wallet, readContract, updateTodos]);
 
-  const newTodos = async () => {
+  const addTodo = async () => {
     try {
       const result = await writeContract.createTodo(textInput);
       await result.wait();
@@ -100,7 +102,7 @@ function App() {
     }
   };
 
-  const removeTodo = async (id) => {
+  const deleteTodo = async (id) => {
     try {
       const result = await writeContract.removeTodo(id);
       await result.wait();
@@ -119,7 +121,7 @@ function App() {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          newTodos();
+          addTodo();
         }}
       >
         <input
@@ -129,35 +131,15 @@ function App() {
             setTextInput(e.target.value);
           }}
         />
-        <button>Add</button>
+        <button>
+          <IconPlus />
+        </button>
       </form>
-      <ul>
-        {todos.map((todo) => (
-          <li
-            key={todo.id}
-            className={todo.completed ? 'done' : null}
-          >
-            <span
-              onClick={() => {
-                completeTodo(todo.id);
-              }}
-            >
-              [O]
-            </span>
-            <span>
-              {' '}
-              - {todo.text} - {todo.completed.toString()} -{' '}
-            </span>
-            <span
-              onClick={() => {
-                removeTodo(todo.id);
-              }}
-            >
-              [X]
-            </span>
-          </li>
-        ))}
-      </ul>
+      <TodoList
+        list={todos}
+        toggle={completeTodo}
+        remove={deleteTodo}
+      />
     </>
   );
 }
