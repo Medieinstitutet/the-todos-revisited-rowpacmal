@@ -16,7 +16,9 @@ const TodoList = ({ list, toggle, remove }) => {
       >
         {todo.completed ? <IconSquareCheckFilled /> : <IconSquare />}
       </button>
+
       <span className={todo.completed ? 'done' : null}>{todo.text}</span>
+
       <button
         className="delete-btn"
         onClick={() => remove(todo.id)}
@@ -25,7 +27,17 @@ const TodoList = ({ list, toggle, remove }) => {
       </button>
     </li>
   ));
-  return <ul className="todo-list">{todoItems}</ul>;
+
+  const createList =
+    list.length > 0 ? (
+      todoItems
+    ) : (
+      <li className="todos-completed">
+        You've completed all your tasks. Enjoy your well-deserved break!
+      </li>
+    );
+
+  return <ul className="todo-list">{createList}</ul>;
 };
 
 export default TodoList;

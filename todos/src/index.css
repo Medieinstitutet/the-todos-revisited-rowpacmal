@@ -63,6 +63,11 @@ button:focus-visible {
 
 ul {
   list-style: none;
+  padding: 0;
+}
+
+footer {
+  margin-top: 2rem;
 }
 
 @media (prefers-color-scheme: light) {

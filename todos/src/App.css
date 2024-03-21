@@ -46,6 +46,26 @@
   opacity: 0.5;
 }
 
+.todo-form {
+  display: flex;
+  justify-content: center;
+  gap: 0.6rem;
+  margin: 2rem 0;
+}
+
+.text-input {
+  border-radius: 2rem;
+  border: 1px solid transparent;
+  transition: border-color 0.25s;
+  padding: 0.6rem 1.2rem;
+  min-width: 400px;
+  min-height: 75px;
+}
+
+.text-input:hover {
+  border-color: #646cff;
+}
+
 .todo-list {
   list-style: none;
   display: flex;
@@ -71,6 +91,10 @@
   border-color: #646cff;
 }
 
+.add-btn {
+  border-radius: 2rem;
+}
+
 .toggle-btn:hover {
   color: #1bffd1;
   border-color: #1bffd1;
@@ -79,4 +103,9 @@
 .delete-btn:hover {
   color: #ff1b32;
   border-color: #ff1b32;
+}
+
+.todos-completed {
+  font-style: italic;
+  font-size: 1.2rem;
 }

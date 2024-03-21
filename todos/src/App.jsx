@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from 'react';
 import config from './utils/config';
 import TodoList from './components/TodoList';
 import { IconPlus } from '@tabler/icons-react';
+import AddTodo from './components/AddTodo';
+import AppFooter from './components/AppFooter';
 
 if (window.ethereum) {
   window.provider = new ethers.BrowserProvider(window.ethereum);
@@ -118,28 +120,20 @@ function App() {
       <div>
         {wallet.accounts} - {wallet.balance} ETH
       </div>
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          addTodo();
-        }}
-      >
-        <input
-          type="text"
-          value={textInput}
-          onChange={(e) => {
-            setTextInput(e.target.value);
-          }}
-        />
-        <button>
-          <IconPlus />
-        </button>
-      </form>
+
+      <AddTodo
+        add={addTodo}
+        input={textInput}
+        setInput={setTextInput}
+      />
+
       <TodoList
         list={todos}
         toggle={completeTodo}
         remove={deleteTodo}
       />
+
+      <AppFooter />
     </>
   );
 }
